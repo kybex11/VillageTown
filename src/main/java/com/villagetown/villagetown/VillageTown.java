@@ -44,6 +44,7 @@ public class VillageTown {
         if (!data.getBoolean("villagetown_hasJoinedBefore")) {
             player.sendSystemMessage(Component.literal("§aДобро пожаловать в новый мир Village Town!"));
             player.sendSystemMessage(Component.literal("§7С текущего момента вы можете создать своё поселение, нажав ПКМ по блоку 'Лагерь'."));
+            player.sendSystemMessage(Component.literal("§7С также доступна команда /vt help для справки и помощи"));
             player.getInventory().add(new net.minecraft.world.item.ItemStack(ModItems.CAMP.get()));
             data.putBoolean("villagetown_hasJoinedBefore", true);
             persistentData.put(ServerPlayer.PERSISTED_NBT_TAG, data);
@@ -63,11 +64,17 @@ public class VillageTown {
                                         })
                                 )
                         )
-                        .then(Commands.literal("help"))
-                                        .executes(context -> {
-                                            pla
-                                            return 1;
-                                        })
+                        .then(Commands.literal("help")
+                        .executes(context -> {
+                            var player = net.minecraft.client.Minecraft.getInstance().player;
+                            if (player != null) {
+                                player.sendSystemMessage(Component.literal("§6VillageTown — список команд:"));
+                                player.sendSystemMessage(Component.literal("§e/vt show dialog §7– показать диалог с NPC"));
+                                player.sendSystemMessage(Component.literal("§e/vt help §7– показать это сообщение"));
+                            }
+                            return 1;
+                        })
+                )
         );
     }
 }
